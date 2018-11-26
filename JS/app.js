@@ -33,3 +33,42 @@ function putBoat(x,y,length,direction){
                     j1[i][j] = 'o';
         }
 }
+
+/* handler de eventos click */
+var handler = function(e) {
+    this.textContent = "X";
+    arrayTablero[this.row][this.column] = "X";
+  };
+  
+function draw() {
+    var tablero = document.getElementById("game");
+  
+    while (tablero.hasChildNodes()) {
+      tablero.removeChild(tablero.firstChild);
+    }
+  
+    for (let i = 0; i <= j1.length ; i++) {
+        var fila = document.createElement("tr");
+        //arrayTablero[s] = new Array(columnas);
+        for (let j = 0; j <= j1[i].length; j++) {
+            var col = document.createElement("td");
+            fila.appendChild(col);
+            if (i === 0 && j === 0) {
+            } else if (i === 0 && j !== 0) {
+                col.textContent = String.fromCharCode(65 + j);
+            } else if (j === 0 && i !== 0) {
+                col.textContent = i;
+            } else {
+                j1[i][j] = 0;
+                col.row = i;
+                col.column = j;
+                col.textContent = "" + i + ',' + j ;
+                col.addEventListener("click", handler );
+            }
+        }
+    
+        tablero.appendChild(fila);
+    }
+}
+  
+  window.onload = () => draw();
