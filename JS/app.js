@@ -1,5 +1,5 @@
 //Tabla de jugador 1
-const rows = 2 , columns = 2;
+const rows = 5 , columns = 5;
 var j1 = new Array(rows);
 
 function printJ1(){
@@ -35,7 +35,7 @@ function putBoat(x,y,length,direction){
 /* handler de eventos click */
 var handlerCell = function(e) {
     this.textContent = "X";
-    arrayTablero[this.row][this.column] = "X";
+    j1[this.row][this.column] = "X";
   };
   
 function drawGame() {
@@ -43,16 +43,16 @@ function drawGame() {
 
     while (tablero.hasChildNodes()) tablero.removeChild(tablero.firstChild);
   
-    for (let i = 0; i <= rows ; i++) {
+    for (let i = -1; i < rows ; i++) {
         var fila = document.createElement("tr");
-        j1[i] = new Array(columns);
-        for (let j = 0; j <= columns; j++) {
+        if( i !== -1 ) j1[i] = new Array(columns);
+        for (let j = -1; j < columns; j++) {
             var col = document.createElement("td");
             fila.appendChild(col);
-            if (i === 0 && j === 0) {
-            } else if (i === 0 && j !== 0) {
+            if (i === -1 && j === -1) {
+            } else if (i === -1 && j !== -1) {
                 col.textContent = String.fromCharCode(65 + j);
-            } else if (j === 0 && i !== 0) {
+            } else if (j === -1 && i !== -1) {
                 col.textContent = i;
             } else {
                 j1[i][j] = 0;
