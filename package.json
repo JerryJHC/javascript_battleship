@@ -1,0 +1,28 @@
+{
+  "name": "javascript_battleship",
+  "version": "1.0.0",
+  "description": "Juego Battleship en javascript",
+  "main": "index.js",
+  "dependencies": {
+    "chai": "^4.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/jerryjhc/javascript_battleship.git"
+  },
+  "keywords": [
+    "battleship",
+    "javascript"
+  ],
+  "author": "Jerry Henríquez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/jerryjhc/javascript_battleship/issues"
+  }
+}
