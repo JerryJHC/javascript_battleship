@@ -1,8 +1,6 @@
 //Tabla de jugador 1
-var j1 = [
-    [ '-' , '-' , '-' ],
-    [ '-' , '-' , '-' ]
-];
+const rows = 2 , columns = 2;
+var j1 = new Array(rows);
 
 function printJ1(){
     j1.forEach(element => {
@@ -35,22 +33,20 @@ function putBoat(x,y,length,direction){
 }
 
 /* handler de eventos click */
-var handler = function(e) {
+var handlerCell = function(e) {
     this.textContent = "X";
     arrayTablero[this.row][this.column] = "X";
   };
   
-function draw() {
+function drawGame() {
     var tablero = document.getElementById("game");
+
+    while (tablero.hasChildNodes()) tablero.removeChild(tablero.firstChild);
   
-    while (tablero.hasChildNodes()) {
-      tablero.removeChild(tablero.firstChild);
-    }
-  
-    for (let i = 0; i <= j1.length ; i++) {
+    for (let i = 0; i <= rows ; i++) {
         var fila = document.createElement("tr");
-        //arrayTablero[s] = new Array(columnas);
-        for (let j = 0; j <= j1[i].length; j++) {
+        j1[i] = new Array(columns);
+        for (let j = 0; j <= columns; j++) {
             var col = document.createElement("td");
             fila.appendChild(col);
             if (i === 0 && j === 0) {
@@ -63,7 +59,7 @@ function draw() {
                 col.row = i;
                 col.column = j;
                 col.textContent = "" + i + ',' + j ;
-                col.addEventListener("click", handler );
+                col.addEventListener("click", handlerCell );
             }
         }
     
@@ -71,4 +67,4 @@ function draw() {
     }
 }
   
-  window.onload = () => draw();
+window.onload = () => drawGame();
