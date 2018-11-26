@@ -40,7 +40,7 @@ function putBoat(x,y,length,direction){
 /* handler de eventos click */
 var handlerCell = function(e) {
     this.textContent = attack(this.row , this.column);
-    console.log(this.removeEventListener('click',handlerCell));
+    this.removeEventListener('click',handlerCell);
   };
   
 function drawGame() {
