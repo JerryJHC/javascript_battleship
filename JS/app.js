@@ -11,8 +11,13 @@ function printJ1(){
 
 function attack(x,y){
     if( x < j1.length )
-        if( y < j1[x].length )
-            j1[x][y] = 'x';
+        if( y < j1[x].length ){
+            if( j1[x][y] == 'B' ){
+                j1[x][y] = 'X';
+                return 'X';
+            }
+        }
+    return 'O';
 }
 
 function putBoat(x,y,length,direction){
@@ -28,14 +33,13 @@ function putBoat(x,y,length,direction){
         if( finalY < j1[x].length ){
             for( let i = x ; i <= finalX ; i++ )
                 for( let j = y ; j <= finalY ; j++ )
-                    j1[i][j] = 'o';
+                    j1[i][j] = 'B';
         }
 }
 
 /* handler de eventos click */
 var handlerCell = function(e) {
-    this.textContent = "X";
-    j1[this.row][this.column] = "X";
+    this.textContent = attack(this.row , this.column);
   };
   
 function drawGame() {
