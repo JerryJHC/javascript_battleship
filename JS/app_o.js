@@ -33,7 +33,7 @@ class tablero{
 
     //funcion para validar si el tablero se puede utilizar
     valid(){
-        return ( this.table !== undefined && tableID != '' ) ? true : false;
+        return ( this.table !== undefined && this.tableID != '' && this.tableID !== undefined ) ? true : false;
     }
 
     //Funcion para atacar una posicion del tablero
