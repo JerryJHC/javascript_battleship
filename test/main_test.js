@@ -28,7 +28,11 @@ describe('tablero', function () {
     var tablero = require('../JS/app_o').tablero;
 
     it('debería devolver true', function () {
-        expect( (new tablero(2,-1)).valid() ).to.be.false;
+        expect( (new tablero('game')).valid() ).to.be.true;
+    });
+
+    it('debería devolver false', function () {
+        expect( (new tablero()).valid() ).to.be.false;
     });
 
 });
