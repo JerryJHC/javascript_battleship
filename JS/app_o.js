@@ -8,10 +8,14 @@ class player{
         console.log(this.name);
     }
 
+    valid(){
+        return ( this.name !== '' ) ? true : false;
+    }
+
 }
 
-class ship{
-    constructor( rows , columns  ){
+class tablero{
+    constructor( rows , columns ){
         if( rows > 0 && columns > 0 )
             this.createTable(rows,columns);
     }
@@ -25,11 +29,12 @@ class ship{
         }
     }
 
-    print(){
-        console.log(this.table);
+    valid(){
+        return ( this.table !== undefined ) ? true : false;
     }
 
 }
 
 //Exportando modulos para test
 module.exports.player = player;
+module.exports.tablero = tablero;
