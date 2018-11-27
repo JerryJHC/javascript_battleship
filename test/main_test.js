@@ -14,3 +14,21 @@ describe('comprobarBarco', function () {
     });
 
 });
+
+describe('player', function () {
+    var player = require('../JS/app_o').player;
+
+    it('debería devolver true', function () {
+        expect( (new player('p1')).valid() ).to.be.true;
+    });
+
+});
+
+describe('tablero', function () {
+    var tablero = require('../JS/app_o').tablero;
+
+    it('debería devolver true', function () {
+        expect( (new tablero(2,-1)).valid() ).to.be.false;
+    });
+
+});
