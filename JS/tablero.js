@@ -51,8 +51,8 @@ class tablero{
     //funcion para agregar barcos en el tablero
     addShip(x,y,length,direction){
         //determina las posiciones finales del barco
-        finalX = x;
-        finalY = y;
+        let finalX = x;
+        let finalY = y;
         if( direction == 'v' )
             finalX += length -1;
         else
