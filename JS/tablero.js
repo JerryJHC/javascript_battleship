@@ -16,8 +16,9 @@ class player{
 
 class tablero{
     //Para crear el tablero se le pasa el id de la tabla donde dibujar en html
-    constructor( tableID ){
+    constructor( tableID , gameType ){
         this.tableID = tableID;
+        this.gameType = gameType;
         this.createTable( 5 , 5 );
     }
 
@@ -84,7 +85,7 @@ class tablero{
                 } else {
                     col.row = i;
                     col.column = j;
-                    col.textContent = "" + i + ',' + j ;
+                    col.textContent = ( this.gameType == 1 ) ? ( "" + i + ',' + j ) : this.table[i][j] ;
                     col.game = this;
                     col.addEventListener("click", this.handlerCell );
                 }
