@@ -19,7 +19,13 @@ class tablero{
     constructor( tableID , gameType ){
         this.tableID = tableID;
         this.gameType = gameType;
+        this.start = false;
         this.createTable( 5 , 5 );
+    }
+
+    //Indica que se ha iniciado la partida
+    startGame(){
+        this.start = true;
     }
 
     //funcion que crea un array que represente el tablero
@@ -97,8 +103,10 @@ class tablero{
 
     handlerCell(e) {
         console.log('pulsado :  ' + this.row + ':' + this.column);
-        this.textContent = this.game.attack(this.row ,this.column);
-        this.removeEventListener('click', this.game.handlerCell);
+        if( this.start ){
+            this.textContent = this.game.attack(this.row ,this.column);
+            this.removeEventListener('click', this.game.handlerCell);
+        }
     };
 }
 
