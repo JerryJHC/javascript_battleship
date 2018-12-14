@@ -96,10 +96,9 @@ class tablero{
     }
 
     handlerCell(e) {
-        let v = e.srcElement;
-        console.log('pulsado :  ' + v.row + ':' + v.column);
-        v.textContent = v.game.attack(v.row ,v.column);
-        v.removeEventListener('click', v.game.handlerCell);
+        console.log('pulsado :  ' + this.row + ':' + this.column);
+        this.textContent = this.game.attack(this.row ,this.column);
+        this.removeEventListener('click', this.game.handlerCell);
     };
 }
 
