@@ -65,6 +65,20 @@ class tablero{
     //Indica que se ha iniciado el modo de edicion para colocar los barcos
     startEdition(){
         this.edit = true;
+        this.validateEdition();
+    }
+
+    //Valida si hay barcos por colocar
+    validateEdition(){
+        this.minActive++;
+        this.direction = '';
+        this.active++;
+        if( this.minActive < this.ships.length ){
+            this.showActiveShip();
+            this.activeShip(this.minActive);
+        }else{
+            console.log("Todos agregados");
+        }
     }
 
     //funcion que crea un array que represente el tablero
@@ -80,7 +94,7 @@ class tablero{
     //Crea un array con los barcos disponibles
     availableShips(max,cant){
         this.ships = new Array(cant);
-        this.minActive = 0;
+        this.minActive = -1;
         for( let i = 0 ; i < cant ; i++ )
             this.ships[i] = new ship(max--);
     }
@@ -110,8 +124,9 @@ class tablero{
         let finalY = y;
         if( this.direction == 'v' )
             finalX += this.ships[this.active].size -1;
-        else
+        else if( this.direction == 'h' )
             finalY += this.ships[this.active].size -1;
+        else return false;
         
         if( !this.validatePosition(x,y,finalX,finalY) ) return false;
         
@@ -120,9 +135,9 @@ class tablero{
                 this.table[i][j] = 'B';
         
         this.ships[this.active].setPosition(x,y);
-        this.ships[this.active].setDirection(direction);
-        this.minActive++;
-        this.direction = '';
+        this.ships[this.active].setDirection(this.direction);
+
+        this.validateEdition();
 
         return true;
     }
@@ -170,12 +185,15 @@ class tablero{
     //Gestiona los eventos de las celdas
     handlerCell(e) {
         let coors = this.id.split(',');
+        coors[0] = parseInt(coors[0]);
+        coors[1] = parseInt(coors[1]);
         console.log('pulsado :  ' + coors[0] + ':' + coors[1] );
         if( this.game.start ){
             this.textContent = this.game.attack( coors[0] , coors[1]);
             this.removeEventListener('click', this.game.handlerCell);
         }else if( this.game.edit ){
-
+            this.game.addShip( coors[0] , coors[1] );
+            this.game.drawGame();
         }
     }
 
