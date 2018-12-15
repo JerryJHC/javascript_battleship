@@ -89,9 +89,9 @@ class tablero{
                 } else if (j === -1 && i !== -1) {
                     col.textContent = i;
                 } else {
-                    col.row = i;
-                    col.column = j;
-                    col.textContent = ( this.gameType == 1 ) ? ( "" + i + ',' + j ) : this.table[i][j] ;
+                    let id = i + ',' + j;
+                    col.textContent = ( this.gameType == 1 ) ? id  : this.table[i][j] ;
+                    col.setAttribute('id', id );
                     col.game = this;
                     col.addEventListener("click", this.handlerCell );
                 }
@@ -102,9 +102,10 @@ class tablero{
     }
 
     handlerCell(e) {
-        console.log('pulsado :  ' + this.row + ':' + this.column);
-        if( this.start ){
-            this.textContent = this.game.attack(this.row ,this.column);
+        let coors = this.id.split(',');
+        console.log('pulsado :  ' + coors[0] + ':' + coors[1] );
+        if( this.game.start ){
+            this.textContent = this.game.attack( coors[0] , coors[0]);
             this.removeEventListener('click', this.game.handlerCell);
         }
     };
