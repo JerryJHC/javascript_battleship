@@ -23,13 +23,13 @@ class ship{
     getName(size){
         switch(size){
             case 5:
-                return 'acorazado';
+                return 'Acorazado';
             case 4:
-                return 'portaviones';
+                return 'Portaviones';
             case 3:
-                return 'buque';
+                return 'Buque';
             default:
-                return 'navio';
+                return 'Navio';
         }
     }
 
@@ -77,7 +77,10 @@ class tablero{
             this.showActiveShip();
             this.activeShip(this.minActive);
         }else{
-            console.log("Todos agregados");
+            this.edit = false;
+            let editPanel = document.getElementById("editPanel");
+            editPanel.hidden = true;
+            editPanel.dispatchEvent( new Event('edit') );
         }
     }
 
@@ -192,8 +195,8 @@ class tablero{
             this.textContent = this.game.attack( coors[0] , coors[1]);
             this.removeEventListener('click', this.game.handlerCell);
         }else if( this.game.edit ){
-            this.game.addShip( coors[0] , coors[1] );
-            this.game.drawGame();
+            if( this.game.addShip( coors[0] , coors[1] ) )
+                this.game.drawGame();
         }
     }
 
@@ -217,7 +220,7 @@ class tablero{
 
     showActiveShip(){
         if( this.validateActive() )
-            document.getElementById("activeShip").innerText = this.ships[this.active].name + ' : ' + this.ships[this.active].size;
+            document.getElementById("activeShip").innerText = "Nombre : " + this.ships[this.active].name + ' - Tamaño : ' + this.ships[this.active].size;
     }
 
 }
