@@ -10,3 +10,10 @@ td:hover {
     background-color: #dbdbdb;
     cursor: pointer;
 }
+
+#informationPanel{
+    height: 100px;
+    width: 25%;
+    overflow-y: scroll;
+    border: 1px solid saddlebrown;
+}

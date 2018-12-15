@@ -78,6 +78,7 @@ class tablero{
             this.activeShip(this.minActive);
         }else{
             this.edit = false;
+            document.getElementById("informationPanel").hidden = false;
             let editPanel = document.getElementById("editPanel");
             editPanel.hidden = true;
             editPanel.dispatchEvent( new Event('edit') );
@@ -109,14 +110,21 @@ class tablero{
 
     //Funcion para atacar una posicion del tablero
     attack(x,y){
-        if( x < this.table.length )
-            if( y < this.table[x].length ){
-                if( this.table[x][y] == 'B' ){
-                    this.table[x][y] = 'X';
-                    return 'X';
-                }
+        let enc = 'O';
+        if( x < this.table.length && y < this.table[x].length )
+            if( this.table[x][y] == 'B' ){
+                this.table[x][y] = 'X';
+                enc = 'X';
             }
-        return 'O';
+        this.addMsg(enc);
+        return enc;
+    }
+
+    //Agrega un mensaje en el informationPanel
+    addMsg(type){
+        let msg = 'vacio';
+        if( type == 'X' )   msg = 'golpeado';
+        document.getElementById("informationPanel").textContent = msg;
     }
 
     //funcion para agregar barcos en el tablero
