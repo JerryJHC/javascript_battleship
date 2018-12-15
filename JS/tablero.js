@@ -38,8 +38,8 @@ class ship{
         this.y = y;
     }
 
-    setOrientation(o){
-        this.orientation = o;
+    setDirection(direction){
+        this.direction = direction;
     }
 
 }
@@ -53,7 +53,7 @@ class tablero{
         this.edit = false;
         this.createTable( 5 , 5 );
         this.availableShips( 5 , 4 );
-        this.activeShip(0);
+        this.activeShip(-1);
     }
 
     //Indica que se ha iniciado la partida
@@ -79,6 +79,7 @@ class tablero{
     //Crea un array con los barcos disponibles
     availableShips(max,cant){
         this.ships = new Array(cant);
+        this.minActive = 0;
         for( let i = 0 ; i < cant ; i++ )
             this.ships[i] = new ship(max--);
     }
@@ -101,21 +102,39 @@ class tablero{
     }
 
     //funcion para agregar barcos en el tablero
-    addShip(x,y,length,direction){
+    addShip(x,y,direction){
+        if( !this.validateActive() ) return false;
         //determina las posiciones finales del barco
         let finalX = x;
         let finalY = y;
         if( direction == 'v' )
-            finalX += length -1;
-        else
-            finalY += length -1;
+            finalX += this.ships[this.active].size -1;
+        else if( direction == 'h' )
+            finalY += this.ships[this.active].size -1;
+        else return false;
         
-        if( finalX < this.table.length )
-            if( finalY < this.table[x].length ){
-                for( let i = x ; i <= finalX ; i++ )
-                    for( let j = y ; j <= finalY ; j++ )
-                        this.table[i][j] = 'B';
-            }
+        if( !this.validatePosition(x,y,finalX,finalY) ) return false;
+        
+        for( let i = x ; i <= finalX ; i++ )
+            for( let j = y ; j <= finalY ; j++ )
+                this.table[i][j] = 'B';
+        
+        this.ships[this.active].setPosition(x,y);
+        this.ships[this.active].setDirection(direction);
+        this.minActive++;
+
+        return true;
+    }
+
+    //Valida que el barco se pueda agregaren la posicion
+    validatePosition(iniX,iniY,endX,endY){
+        if( endX >= this.table.length || endY >= this.table[endX].length )  return false;
+        
+        for( let i = iniX ; i <= endX ; i++ )
+            for( let j = iniY ; j <= endY ; j++ )
+                if( this.table[i][j] == 'B' )   return false;
+        
+        return true;
     }
 
     drawGame() {
@@ -157,9 +176,14 @@ class tablero{
         }
     }
 
-    //Activa el barco a utilizar
+    //Activa el barco a utilizar en la edicion
     activeShip(active){
         this.active = active;
+    }
+
+    //Valida que haya un barco activo
+    validateActive(){
+        return this.active >= this.minActive && this.active < this.ships.length;
     }
 
 }
