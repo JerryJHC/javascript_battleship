@@ -134,8 +134,10 @@ class tablero{
         if( !this.validatePosition(x,y,finalX,finalY) ) return false;
         
         for( let i = x ; i <= finalX ; i++ )
-            for( let j = y ; j <= finalY ; j++ )
+            for( let j = y ; j <= finalY ; j++ ){
                 this.table[i][j] = 'B';
+                document.getElementById(i + ',' + j).textContent = 'B';
+            }
         
         this.ships[this.active].setPosition(x,y);
         this.ships[this.active].setDirection(this.direction);
@@ -191,12 +193,11 @@ class tablero{
         coors[0] = parseInt(coors[0]);
         coors[1] = parseInt(coors[1]);
         console.log('pulsado :  ' + coors[0] + ':' + coors[1] );
-        if( this.game.start ){
+        if( this.game.start && this.game.gameType == 1 ){
             this.textContent = this.game.attack( coors[0] , coors[1]);
             this.removeEventListener('click', this.game.handlerCell);
         }else if( this.game.edit ){
-            if( this.game.addShip( coors[0] , coors[1] ) )
-                this.game.drawGame();
+            this.game.addShip( coors[0] , coors[1] )
         }
     }
 
