@@ -54,6 +54,7 @@ class tablero{
         this.createTable( 5 , 5 );
         this.availableShips( 5 , 4 );
         this.activeShip(-1);
+        this.direction = '';
     }
 
     //Indica que se ha iniciado la partida
@@ -102,16 +103,15 @@ class tablero{
     }
 
     //funcion para agregar barcos en el tablero
-    addShip(x,y,direction){
+    addShip(x,y){
         if( !this.validateActive() ) return false;
         //determina las posiciones finales del barco
         let finalX = x;
         let finalY = y;
-        if( direction == 'v' )
+        if( this.direction == 'v' )
             finalX += this.ships[this.active].size -1;
-        else if( direction == 'h' )
+        else
             finalY += this.ships[this.active].size -1;
-        else return false;
         
         if( !this.validatePosition(x,y,finalX,finalY) ) return false;
         
@@ -122,6 +122,7 @@ class tablero{
         this.ships[this.active].setPosition(x,y);
         this.ships[this.active].setDirection(direction);
         this.minActive++;
+        this.direction = '';
 
         return true;
     }
@@ -137,6 +138,7 @@ class tablero{
         return true;
     }
 
+    //Dibuja el tablero
     drawGame() {
         var tablero = document.getElementById(this.tableID);
     
@@ -165,6 +167,7 @@ class tablero{
         }
     }
 
+    //Gestiona los eventos de las celdas
     handlerCell(e) {
         let coors = this.id.split(',');
         console.log('pulsado :  ' + coors[0] + ':' + coors[1] );
@@ -184,6 +187,19 @@ class tablero{
     //Valida que haya un barco activo
     validateActive(){
         return this.active >= this.minActive && this.active < this.ships.length;
+    }
+
+    //Asgina la direccion actual del barco a utilizar
+    setActiveDirection(direction){
+        if( direction == 'v' )
+            this.direction = 'v';
+        else if( direction == 'h' )
+                this.direction = 'h';
+    }
+
+    showActiveShip(){
+        if( this.validateActive() )
+            document.getElementById("activeShip").innerText = this.ships[this.active].name + ' : ' + this.ships[this.active].size;
     }
 
 }
