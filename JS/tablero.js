@@ -14,18 +14,56 @@ class player{
 
 }
 
+class ship{
+    constructor( size ){
+        this.name = this.getName(size);
+        this.size = size;
+    }
+
+    getName(size){
+        switch(size){
+            case 5:
+                return 'acorazado';
+            case 4:
+                return 'portaviones';
+            case 3:
+                return 'buque';
+            default:
+                return 'navio';
+        }
+    }
+
+    setPosition(x,y){
+        this.x = x;
+        this.y = y;
+    }
+
+    setOrientation(o){
+        this.orientation = o;
+    }
+
+}
+
 class tablero{
     //Para crear el tablero se le pasa el id de la tabla donde dibujar en html
     constructor( tableID , gameType ){
         this.tableID = tableID;
         this.gameType = gameType;
         this.start = false;
+        this.edit = false;
         this.createTable( 5 , 5 );
+        this.availableShips( 5 , 4 );
+        this.activeShip(0);
     }
 
     //Indica que se ha iniciado la partida
     startGame(){
         this.start = true;
+    }
+
+    //Indica que se ha iniciado el modo de edicion para colocar los barcos
+    startEdition(){
+        this.edit = true;
     }
 
     //funcion que crea un array que represente el tablero
@@ -36,6 +74,13 @@ class tablero{
             for( let j = 0 ; j < columns ; j++ )
                 this.table[i][j] = 0;
         }
+    }
+
+    //Crea un array con los barcos disponibles
+    availableShips(max,cant){
+        this.ships = new Array(cant);
+        for( let i = 0 ; i < cant ; i++ )
+            this.ships[i] = new ship(max--);
     }
 
     //funcion para validar si el tablero se puede utilizar
@@ -105,10 +150,18 @@ class tablero{
         let coors = this.id.split(',');
         console.log('pulsado :  ' + coors[0] + ':' + coors[1] );
         if( this.game.start ){
-            this.textContent = this.game.attack( coors[0] , coors[0]);
+            this.textContent = this.game.attack( coors[0] , coors[1]);
             this.removeEventListener('click', this.game.handlerCell);
+        }else if( this.game.edit ){
+
         }
-    };
+    }
+
+    //Activa el barco a utilizar
+    activeShip(active){
+        this.active = active;
+    }
+
 }
 
 //Exportando modulos para test
