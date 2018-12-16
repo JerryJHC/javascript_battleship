@@ -1,8 +1,12 @@
 var tableroJ1 , tableroJ2;
 
 function addShip(){
-    console.log(this.getAttribute('data-action'));
-    tableroJ1.setActiveDirection(this.getAttribute('data-action'));
+    let action = this.getAttribute('data-action');
+    console.log(action);
+    if( action == 'random' )
+        tableroJ1.randomShips();
+    else
+        tableroJ1.setActiveDirection(action);
 }
 
 function startGame(){
