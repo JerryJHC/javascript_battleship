@@ -118,8 +118,9 @@ class tablero{
 
     //Funcion para atacar una posicion del tablero
     attack(x,y){
-        if( x < this.table.length && y < this.table[x].length )
-            if( this.table[x][y] == 'B' ){
+        if( x < this.table.length && y < this.table[x].length ){
+            if( this.table[x][y] == 'O' ) return false;
+            else if( this.table[x][y] == 'B' ){
                 this.table[x][y] = 'X';
                 for( let i = 0 ; i < this.ships.length ; i++ )
                     if( this.ships[i].hit( x , y ) ){
@@ -131,13 +132,25 @@ class tablero{
                     }
                 return 'X';
             }
-        this.addMsg("no ha acertado");
-        return 'O';
+            this.addMsg("no ha acertado");
+            this.table[x][y] = 'O';
+            
+            return true;
+        }else
+            return false;
+    }
+
+    //Agrega un valor a una celda de la vista
+    setCell(x,y,value){
+        document.getElementById(x + ',' + y).textContent = value;
     }
 
     //Agrega un mensaje en el informationPanel
     addMsg(msg){
-        document.getElementById("informationPanel").textContent = this.enemy + ' ' + msg;
+        if( this.gameType == 1 )
+            document.getElementById("informationPanel").textContent = this.enemy + ' ' + msg;
+        else
+            document.getElementById("informationPanel").textContent += this.enemy + ' ' + msg;
     }
 
     //funcion para agregar barcos en el tablero
@@ -157,7 +170,7 @@ class tablero{
         for( let i = x ; i <= finalX ; i++ )
             for( let j = y ; j <= finalY ; j++ ){
                 this.table[i][j] = 'B';
-                if( this.gameType == 0 )    document.getElementById(i + ',' + j).textContent = 'B';
+                if( this.gameType == 0 )    this.setCell( i , j , 'B' );
             }
         
         this.ships[this.active].setPosition(x,y);
@@ -198,7 +211,7 @@ class tablero{
                 } else {
                     let id = i + ',' + j;
                     col.textContent = ( this.gameType == 1 ) ? id  : this.table[i][j] ;
-                    col.setAttribute('id', id );
+                    col.setAttribute('class', id );
                     col.game = this;
                     col.addEventListener("click", this.handlerCell );
                 }
@@ -214,8 +227,8 @@ class tablero{
         coors[0] = parseInt(coors[0]);
         coors[1] = parseInt(coors[1]);
         if( this.game.start && this.game.gameType == 1 ){
-            this.textContent = this.game.attack( coors[0] , coors[1]);
             this.removeEventListener('click', this.game.handlerCell);
+            this.game.sendEvent('informationPanel','attack');
         }else if( this.game.edit ){
             this.game.addShip( coors[0] , coors[1] )
         }
@@ -257,6 +270,15 @@ class tablero{
             let rndX = Math.round( Math.random() * ( this.table.length -1) ) , rndY = Math.round( Math.random() * ( this.table[0].length -1) );
             this.direction = ( Math.random() > 0.5 ) ? 'v' : 'h';
             this.addShip( rndX , rndY )
+        }
+    }
+
+    //Realiza un ataque aleatorio
+    randomAttack(){
+        let attack = false;
+        while( !attack ){
+            let rndX = Math.round( Math.random() * ( this.table.length -1) ) , rndY = Math.round( Math.random() * ( this.table[0].length -1) );
+            attack = this.attack(rndX,rndY);
         }
     }
 

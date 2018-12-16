@@ -25,7 +25,7 @@ function startGame(){
 
 //Controla el estado de la partida
 function game(){
-    
+    tableroJ1.randomAttack();
 }
 
 window.onload = () => {
