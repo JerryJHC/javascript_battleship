@@ -127,21 +127,23 @@ class tablero{
     //Funcion para atacar una posicion del tablero
     attack(x,y){
         if( x < this.table.length && y < this.table[x].length ){
-            if( this.table[x][y] == 'O' ) return false;
+            if( this.table[x][y] == 'O' || this.table[x][y] == 'X' ) return false;
             else if( this.table[x][y] == 'B' ){
-                this.setCell(x,y,'X');
+                this.table[x][y] = 'X';
                 for( let i = 0 ; i < this.ships.length ; i++ )
                     if( this.ships[i].hit( x , y ) ){
                         if( this.ships[i].alive() )
                             this.addMsg( "ha golpeado el " + this.ships[i].name );
                         else
                             this.addMsg( "ha eliminado el " + this.ships[i].name );
+                        this.setCell( x , y , this.ships[i].name + " attacked" );
                         break;
                     }
                 return true;
             }
             this.addMsg("no ha acertado");
-            this.setCell(x,y,'O');
+            this.table[x][y] = 'O';
+            this.setCell(x,y,"water attacked");
             return true;
         }else
             return false;
@@ -149,8 +151,7 @@ class tablero{
 
     //Agrega un valor a una celda de la vista
     setCell(x,y,value){
-        this.table[x][y] = value;
-        document.querySelector("#" + this.tableID + " ._" + x + 'n' + y).textContent = value;
+        document.querySelector("#" + this.tableID + " ._" + x + 'n' + y ).setAttribute('class' , value );
     }
 
     //Agrega un mensaje en el informationPanel
@@ -175,7 +176,7 @@ class tablero{
         for( let i = x ; i <= finalX ; i++ )
             for( let j = y ; j <= finalY ; j++ ){
                 this.table[i][j] = 'B';
-                if( this.gameType == 0 )    this.setCell( i , j , 'B' );
+                if( this.gameType == 0 )    this.setCell( i , j , '_' + i + 'n' + j + ' ' + this.ships[this.active].name );
             }
         
         this.ships[this.active].setPosition(x,y);
@@ -214,8 +215,7 @@ class tablero{
                 } else if (j === -1 && i !== -1) {
                     col.textContent = i;
                 } else {
-                    col.textContent = ( this.gameType == 1 ) ? ''  : this.table[i][j] ;
-                    col.setAttribute('class', '_' + i + 'n' + j );
+                    col.setAttribute('class', '_' + i + 'n' + j + " water" );
                     col.game = this;
                     col.addEventListener("click", this.handlerCell );
                 }

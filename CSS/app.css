@@ -1,3 +1,45 @@
+body{
+    background-color:chocolate;
+}
+
+.main_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+button{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+button:hover{
+    background-color: darkgreen;
+}
+
+#activeShip{
+    font-size: 16px;
+    color: blue;
+}
+
+h1{
+    color: darkgray;
+}
+
+h3{
+    color: brown;
+}
+
+table{
+    border: 2px solid black;
+}
+
 td {
     width: 50px;
     height: 50px;
@@ -5,7 +47,7 @@ td {
     text-align: center;
     font-size: 20pt;
 }
-  
+
 td:hover {
     background-color: #dbdbdb;
     cursor: pointer;
@@ -14,5 +56,21 @@ td:hover {
 #informationPanel{
     height: 120px;
     width: 25%;
-    border: 1px solid saddlebrown;
+    border: 2px solid saddlebrown;
+    margin-top: 5px;
 }
+
+.water{ background-color: aqua; }
+.water.attacked{    background-color: blue; }
+
+.Acorazado{ background-color: crimson;  }
+.Acorazado.attacked{    background-color: red;  }
+
+.Portaviones{ background-color: darkgreen;  }
+.Portaviones.attacked{    background-color: green;  }
+
+.Buque{ background-color: darkgoldenrod;  }
+.Buque.attacked{    background-color: yellow;  }
+
+.Navio{ background-color: slateblue;  }
+.Navio.attacked{    background-color: blueviolet;  }
