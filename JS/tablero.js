@@ -63,6 +63,7 @@ class tablero{
         this.activeShip(-1);
         this.direction = '';
         this.info = document.querySelector("#informationPanel p."+tableID);
+        this.info.textContent = '';
         if( gameType == 0 ) this.genPositionList( rows , columns );
     }
 
