@@ -13,6 +13,10 @@ function startGame(){
     tableroJ2.startGame();
 }
 
+function game(){
+    
+}
+
 window.onload = () => {
 
     document.querySelectorAll(".addShip").forEach( e => {
@@ -20,6 +24,8 @@ window.onload = () => {
     });
 
     document.getElementById("editPanel").addEventListener('edit',startGame);
+
+    document.getElementById("informationPanel").addEventListener('attack',game);
 
     tableroJ1 = new tablero('game',0);
     tableroJ1.drawGame();

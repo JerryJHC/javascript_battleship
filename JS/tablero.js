@@ -18,6 +18,7 @@ class ship{
     constructor( size ){
         this.name = this.getName(size);
         this.size = size;
+        this.health = size;
     }
 
     getName(size){
@@ -40,6 +41,25 @@ class ship{
 
     setDirection(direction){
         this.direction = direction;
+    }
+
+    hit(x,y){
+        let endX = this.x , endY = this.y;
+        if( this.direction == 'v' )
+            endY += this.size;
+        else if( this.direction == 'h' )
+            endX += this.size;
+        else
+            return false;
+        if( x >= this.x && x <= endX && y >= this.endY && y <= this.endY ){
+            this.health--;
+            return true;
+        }else
+            return false;
+    }
+
+    alive(){
+        return this.health > 0;
     }
 
 }
@@ -79,9 +99,8 @@ class tablero{
         }else{
             this.edit = false;
             document.getElementById("informationPanel").hidden = false;
-            let editPanel = document.getElementById("editPanel");
-            editPanel.hidden = true;
-            editPanel.dispatchEvent( new Event('edit') );
+            document.getElementById("editPanel").hidden = true;
+            this.sendEvent( "editPanel","edit" )
         }
     }
 
@@ -110,14 +129,12 @@ class tablero{
 
     //Funcion para atacar una posicion del tablero
     attack(x,y){
-        let enc = 'O';
         if( x < this.table.length && y < this.table[x].length )
             if( this.table[x][y] == 'B' ){
                 this.table[x][y] = 'X';
                 enc = 'X';
             }
-        this.addMsg(enc);
-        return enc;
+        return 'O';
     }
 
     //Agrega un mensaje en el informationPanel
@@ -202,7 +219,15 @@ class tablero{
         coors[1] = parseInt(coors[1]);
         console.log('pulsado :  ' + coors[0] + ':' + coors[1] );
         if( this.game.start && this.game.gameType == 1 ){
-            this.textContent = this.game.attack( coors[0] , coors[1]);
+            let attack = this.game.attack( coors[0] , coors[1]);
+            if( attack == 'X' ){
+                for( let i = 0 ; i < this.ships.length ; i++ )
+                    if( this.ships[i].hit( coors[0] , coors[1] ) ){
+                        this.addMsg( "Golpeado : " + this.ships[i].name );
+                        break;
+                    }
+            }
+            this.textContent = attack;
             this.removeEventListener('click', this.game.handlerCell);
         }else if( this.game.edit ){
             this.game.addShip( coors[0] , coors[1] )
@@ -230,6 +255,11 @@ class tablero{
     showActiveShip(){
         if( this.validateActive() )
             document.getElementById("activeShip").innerText = "Nombre : " + this.ships[this.active].name + ' - Tamaño : ' + this.ships[this.active].size;
+    }
+
+    sendEvent( id , event ){
+        let editPanel = document.getElementById(id);
+        editPanel.dispatchEvent( new Event(event) );
     }
 
 }
