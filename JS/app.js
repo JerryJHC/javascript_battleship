@@ -3,7 +3,6 @@ var tableroJ1 , tableroJ2;
 //Controla la edicion de barcos
 function addShip(){
     let action = this.getAttribute('data-action');
-    console.log(action);
     if( action == 'random' )
         tableroJ1.randomShips();
     else
@@ -21,6 +20,8 @@ function startGame(){
     tableroJ2.startGame("Jugador1");
     
     document.getElementById("editPanel").removeEventListener('edit',startGame);
+
+    document.getElementById("TableroJ2").hidden = false;
 }
 
 //Controla el estado de la partida

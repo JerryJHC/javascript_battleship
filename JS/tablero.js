@@ -53,14 +53,17 @@ class ship{
 class tablero{
     //Para crear el tablero se le pasa el id de la tabla donde dibujar en html
     constructor( tableID , gameType ){
+        let rows = 5 , columns = 5;
         this.tableID = tableID;
         this.gameType = gameType;
         this.start = false;
         this.edit = false;
-        this.createTable( 5 , 5 );
-        this.availableShips( 5 , 4 );
+        this.createTable( rows , columns );
+        this.availableShips( rows , columns -1 );
         this.activeShip(-1);
         this.direction = '';
+        this.info = document.querySelector("#informationPanel p");
+        if( gameType == 0 ) this.genPositionList( rows , columns );
     }
 
     //Indica que se ha iniciado la partida
@@ -121,7 +124,7 @@ class tablero{
         if( x < this.table.length && y < this.table[x].length ){
             if( this.table[x][y] == 'O' ) return false;
             else if( this.table[x][y] == 'B' ){
-                this.table[x][y] = 'X';
+                this.setCell(x,y,'X');
                 for( let i = 0 ; i < this.ships.length ; i++ )
                     if( this.ships[i].hit( x , y ) ){
                         if( this.ships[i].alive() )
@@ -130,11 +133,10 @@ class tablero{
                             this.addMsg( "ha eliminado el " + this.ships[i].name );
                         break;
                     }
-                return 'X';
+                return true;
             }
             this.addMsg("no ha acertado");
-            this.table[x][y] = 'O';
-            
+            this.setCell(x,y,'O');
             return true;
         }else
             return false;
@@ -142,15 +144,16 @@ class tablero{
 
     //Agrega un valor a una celda de la vista
     setCell(x,y,value){
-        document.getElementById(x + ',' + y).textContent = value;
+        this.table[x][y] = value;
+        document.querySelector("#" + this.tableID + " ._" + x + 'n' + y).textContent = value;
     }
 
     //Agrega un mensaje en el informationPanel
     addMsg(msg){
         if( this.gameType == 1 )
-            document.getElementById("informationPanel").textContent = this.enemy + ' ' + msg;
+            this.info.textContent = this.enemy + ' ' + msg;
         else
-            document.getElementById("informationPanel").textContent += this.enemy + ' ' + msg;
+            this.info.textContent += "\n" + this.enemy + ' ' + msg;
     }
 
     //funcion para agregar barcos en el tablero
@@ -209,24 +212,23 @@ class tablero{
                 } else if (j === -1 && i !== -1) {
                     col.textContent = i;
                 } else {
-                    let id = i + ',' + j;
-                    col.textContent = ( this.gameType == 1 ) ? id  : this.table[i][j] ;
-                    col.setAttribute('class', id );
+                    col.textContent = ( this.gameType == 1 ) ? ''  : this.table[i][j] ;
+                    col.setAttribute('class', '_' + i + 'n' + j );
                     col.game = this;
                     col.addEventListener("click", this.handlerCell );
                 }
             }
-        
             tablero.appendChild(fila);
         }
     }
 
     //Gestiona los eventos de las celdas
     handlerCell(e) {
-        let coors = this.id.split(',');
+        let coors = this.className.replace("_","").split('n');
         coors[0] = parseInt(coors[0]);
         coors[1] = parseInt(coors[1]);
         if( this.game.start && this.game.gameType == 1 ){
+            this.game.attack( coors[0] , coors[1] );
             this.removeEventListener('click', this.game.handlerCell);
             this.game.sendEvent('informationPanel','attack');
         }else if( this.game.edit ){
@@ -273,13 +275,20 @@ class tablero{
         }
     }
 
-    //Realiza un ataque aleatorio
+    //Realiza un ataque aleatorio utilizando la lista de ataques disponibles
     randomAttack(){
-        let attack = false;
-        while( !attack ){
-            let rndX = Math.round( Math.random() * ( this.table.length -1) ) , rndY = Math.round( Math.random() * ( this.table[0].length -1) );
-            attack = this.attack(rndX,rndY);
-        }
+        let index = Math.round( Math.random() * ( this.positionList.length -1) );
+        this.attack( this.positionList[index][0] , this.positionList[index][1] );
+        this.positionList.splice(index,1);
+    }
+
+    //Genera un listado con todas las posibles posiciones de ataque
+    genPositionList(rows,columns){
+        this.positionList = new Array( rows * columns);
+        let c = 0;
+        for( let i = 0 ; i < rows ; i++ )
+            for( let j = 0 ; j < columns ; j++ )
+                this.positionList[c++] = [i,j];
     }
 
 }
