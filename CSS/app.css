@@ -12,8 +12,7 @@ td:hover {
 }
 
 #informationPanel{
-    height: 100px;
+    height: 120px;
     width: 25%;
-    overflow-y: scroll;
     border: 1px solid saddlebrown;
 }

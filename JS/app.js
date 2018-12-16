@@ -26,7 +26,21 @@ function startGame(){
 
 //Controla el estado de la partida
 function game(){
-    tableroJ1.randomAttack();
+    if( tableroJ2.end() ){
+        endGame(tableroJ2);
+    }else{
+        tableroJ1.randomAttack();
+        if( tableroJ1.end() ){
+            endGame(tableroJ1);
+        }
+    }
+}
+
+//Finaliza la partida dando al ganador
+function endGame(looser){
+    tableroJ1.endGame();
+    tableroJ2.endGame();
+    alert("Ha terminado la partida el ganador es : " + looser.enemy );
 }
 
 window.onload = () => {

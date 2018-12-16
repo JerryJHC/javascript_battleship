@@ -62,7 +62,7 @@ class tablero{
         this.availableShips( rows , columns -1 );
         this.activeShip(-1);
         this.direction = '';
-        this.info = document.querySelector("#informationPanel p");
+        this.info = document.querySelector("#informationPanel p."+tableID);
         if( gameType == 0 ) this.genPositionList( rows , columns );
     }
 
@@ -70,6 +70,10 @@ class tablero{
     startGame(enemy){
         this.start = true;
         this.enemy = enemy;
+    }
+
+    endGame(){
+        this.start = false;
     }
 
     //Indica que se ha iniciado el modo de edicion para colocar los barcos
@@ -150,10 +154,7 @@ class tablero{
 
     //Agrega un mensaje en el informationPanel
     addMsg(msg){
-        if( this.gameType == 1 )
-            this.info.textContent = this.enemy + ' ' + msg;
-        else
-            this.info.textContent += "\n" + this.enemy + ' ' + msg;
+        this.info.textContent = this.enemy + ' ' + msg;
     }
 
     //funcion para agregar barcos en el tablero
@@ -289,6 +290,13 @@ class tablero{
         for( let i = 0 ; i < rows ; i++ )
             for( let j = 0 ; j < columns ; j++ )
                 this.positionList[c++] = [i,j];
+    }
+
+    //Comprueba si todos los barcos han sido derribados
+    end(){
+        for( let i = 0 ; i < this.ships.length ; i++ )
+            if( this.ships[i].alive() )   return false;
+        return true;
     }
 
 }
