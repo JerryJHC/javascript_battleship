@@ -1,19 +1,4 @@
-//Clase para la funcionalidad de los jugadores
-class player{
-    constructor( name ){
-        this.name = name;
-    }
-
-    print() {
-        console.log(this.name);
-    }
-
-    valid(){
-        return ( this.name !== '' ) ? true : false;
-    }
-
-}
-
+//Clase para contener informacion de los barcos en el tablero
 class ship{
     constructor( size ){
         this.name = this.getName(size);
@@ -51,7 +36,7 @@ class ship{
             endX += this.size;
         else
             return false;
-        if( x >= this.x && x <= endX && y >= this.endY && y <= this.endY ){
+        if( x >= this.x && x <= endX && y >= this.y && y <= endY ){
             this.health--;
             return true;
         }else
@@ -64,6 +49,7 @@ class ship{
 
 }
 
+//Clase para controlar las partidas sonbre un tablero
 class tablero{
     //Para crear el tablero se le pasa el id de la tabla donde dibujar en html
     constructor( tableID , gameType ){
@@ -78,8 +64,9 @@ class tablero{
     }
 
     //Indica que se ha iniciado la partida
-    startGame(){
+    startGame(enemy){
         this.start = true;
+        this.enemy = enemy;
     }
 
     //Indica que se ha iniciado el modo de edicion para colocar los barcos
@@ -98,9 +85,11 @@ class tablero{
             this.activeShip(this.minActive);
         }else{
             this.edit = false;
-            document.getElementById("informationPanel").hidden = false;
-            document.getElementById("editPanel").hidden = true;
-            this.sendEvent( "editPanel","edit" )
+            if( this.gameType == 0 ){
+                document.getElementById("informationPanel").hidden = false;
+                document.getElementById("editPanel").hidden = true;
+                this.sendEvent( "editPanel","edit" );
+            }
         }
     }
 
@@ -132,16 +121,20 @@ class tablero{
         if( x < this.table.length && y < this.table[x].length )
             if( this.table[x][y] == 'B' ){
                 this.table[x][y] = 'X';
-                enc = 'X';
+                for( let i = 0 ; i < this.ships.length ; i++ )
+                    if( this.ships[i].hit( x , y ) ){
+                        this.addMsg( "ha golpeado el " + this.ships[i].name );
+                        break;
+                    }
+                return 'X';
             }
+        this.addMsg("no ha acertado");
         return 'O';
     }
 
     //Agrega un mensaje en el informationPanel
-    addMsg(type){
-        let msg = 'vacio';
-        if( type == 'X' )   msg = 'golpeado';
-        document.getElementById("informationPanel").textContent = msg;
+    addMsg(msg){
+        document.getElementById("informationPanel").textContent = this.enemy + ' ' + msg;
     }
 
     //funcion para agregar barcos en el tablero
@@ -161,7 +154,7 @@ class tablero{
         for( let i = x ; i <= finalX ; i++ )
             for( let j = y ; j <= finalY ; j++ ){
                 this.table[i][j] = 'B';
-                document.getElementById(i + ',' + j).textContent = 'B';
+                if( this.gameType == 0 )    document.getElementById(i + ',' + j).textContent = 'B';
             }
         
         this.ships[this.active].setPosition(x,y);
@@ -219,15 +212,7 @@ class tablero{
         coors[1] = parseInt(coors[1]);
         console.log('pulsado :  ' + coors[0] + ':' + coors[1] );
         if( this.game.start && this.game.gameType == 1 ){
-            let attack = this.game.attack( coors[0] , coors[1]);
-            if( attack == 'X' ){
-                for( let i = 0 ; i < this.ships.length ; i++ )
-                    if( this.ships[i].hit( coors[0] , coors[1] ) ){
-                        this.addMsg( "Golpeado : " + this.ships[i].name );
-                        break;
-                    }
-            }
-            this.textContent = attack;
+            this.textContent = this.game.attack( coors[0] , coors[1]);
             this.removeEventListener('click', this.game.handlerCell);
         }else if( this.game.edit ){
             this.game.addShip( coors[0] , coors[1] )
@@ -252,14 +237,25 @@ class tablero{
                 this.direction = 'h';
     }
 
+    //Muestra el barco activo en la edicion
     showActiveShip(){
         if( this.validateActive() )
             document.getElementById("activeShip").innerText = "Nombre : " + this.ships[this.active].name + ' - Tamaño : ' + this.ships[this.active].size;
     }
 
+    //Genera un evento en un elemento de HTML
     sendEvent( id , event ){
         let editPanel = document.getElementById(id);
         editPanel.dispatchEvent( new Event(event) );
+    }
+
+    //Coloca los barcos de forma aleatoria en el tablero
+    randomShips(){
+        while( this.active < this.ships.length){
+            let rndX = Math.round( Math.random() * ( this.table.length -1) ) , rndY = Math.round( Math.random() * ( this.table[0].length -1) );
+            this.direction = ( Math.random() > 0.5 ) ? 'v' : 'h';
+            this.addShip( rndX , rndY )
+        }
     }
 
 }

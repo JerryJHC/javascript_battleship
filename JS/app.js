@@ -8,13 +8,17 @@ function addShip(){
 function startGame(){
     tableroJ2 = new tablero('game2',1);
     tableroJ2.drawGame();
+    tableroJ2.startEdition();
+    tableroJ2.randomShips();
 
-    tableroJ1.startGame();
-    tableroJ2.startGame();
+    tableroJ1.startGame("CPU");
+    tableroJ2.startGame("Jugador1");
+    
+    document.getElementById("editPanel").removeEventListener('edit',startGame);
 }
 
 function game(){
-    
+
 }
 
 window.onload = () => {
