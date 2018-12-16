@@ -31,9 +31,9 @@ class ship{
     hit(x,y){
         let endX = this.x , endY = this.y;
         if( this.direction == 'v' )
-            endY += this.size;
-        else if( this.direction == 'h' )
             endX += this.size;
+        else if( this.direction == 'h' )
+            endY += this.size;
         else
             return false;
         if( x >= this.x && x <= endX && y >= this.y && y <= endY ){
@@ -123,7 +123,10 @@ class tablero{
                 this.table[x][y] = 'X';
                 for( let i = 0 ; i < this.ships.length ; i++ )
                     if( this.ships[i].hit( x , y ) ){
-                        this.addMsg( "ha golpeado el " + this.ships[i].name );
+                        if( this.ships[i].alive() )
+                            this.addMsg( "ha golpeado el " + this.ships[i].name );
+                        else
+                            this.addMsg( "ha eliminado el " + this.ships[i].name );
                         break;
                     }
                 return 'X';
@@ -210,7 +213,6 @@ class tablero{
         let coors = this.id.split(',');
         coors[0] = parseInt(coors[0]);
         coors[1] = parseInt(coors[1]);
-        console.log('pulsado :  ' + coors[0] + ':' + coors[1] );
         if( this.game.start && this.game.gameType == 1 ){
             this.textContent = this.game.attack( coors[0] , coors[1]);
             this.removeEventListener('click', this.game.handlerCell);

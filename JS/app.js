@@ -1,5 +1,6 @@
 var tableroJ1 , tableroJ2;
 
+//Controla la edicion de barcos
 function addShip(){
     let action = this.getAttribute('data-action');
     console.log(action);
@@ -9,6 +10,7 @@ function addShip(){
         tableroJ1.setActiveDirection(action);
 }
 
+//Inicializa el juego
 function startGame(){
     tableroJ2 = new tablero('game2',1);
     tableroJ2.drawGame();
@@ -21,8 +23,9 @@ function startGame(){
     document.getElementById("editPanel").removeEventListener('edit',startGame);
 }
 
+//Controla el estado de la partida
 function game(){
-
+    
 }
 
 window.onload = () => {
