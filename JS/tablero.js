@@ -53,13 +53,13 @@ class ship{
 class tablero{
     //Para crear el tablero se le pasa el id de la tabla donde dibujar en html
     constructor( tableID , gameType ){
-        let rows = 5 , columns = 5;
+        let rows = 10 , columns = 10;
         this.tableID = tableID;
         this.gameType = gameType;
         this.start = false;
         this.edit = false;
         this.createTable( rows , columns );
-        this.availableShips( rows , columns -1 );
+        this.availableShips( 10 );
         this.activeShip(-1);
         this.direction = '';
         this.info = document.querySelector("#informationPanel p."+tableID);
@@ -112,11 +112,12 @@ class tablero{
     }
 
     //Crea un array con los barcos disponibles
-    availableShips(max,cant){
+    availableShips(cant){
+        let list = [5,4,4,3,3,3,2,2,2,2];
         this.ships = new Array(cant);
         this.minActive = -1;
         for( let i = 0 ; i < cant ; i++ )
-            this.ships[i] = new ship(max--);
+            this.ships[i] = new ship(list[i]);
     }
 
     //funcion para validar si el tablero se puede utilizar
@@ -133,9 +134,9 @@ class tablero{
                 for( let i = 0 ; i < this.ships.length ; i++ )
                     if( this.ships[i].hit( x , y ) ){
                         if( this.ships[i].alive() )
-                            this.addMsg( "ha golpeado el " + this.ships[i].name );
+                            this.addMsg( "ha golpeado un " + this.ships[i].name );
                         else
-                            this.addMsg( "ha eliminado el " + this.ships[i].name );
+                            this.addMsg( "ha eliminado un " + this.ships[i].name );
                         this.setCell( x , y , this.ships[i].name + " attacked" );
                         break;
                     }
@@ -303,5 +304,5 @@ class tablero{
 }
 
 //Exportando modulos para test
-module.exports.player = player;
+module.exports.ship = ship;
 module.exports.tablero = tablero;
