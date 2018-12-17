@@ -15,24 +15,55 @@ describe('comprobarBarco', function () {
 
 });
 
-describe('player', function () {
-    var player = require('../JS/app_o').player;
+describe('ship', function () {
+    var ship = require('../JS/tablero').ship;
 
-    it('debería devolver true', function () {
-        expect( (new player('p1')).valid() ).to.be.true;
+    let s1 = new ship(4);
+    s1.setPosition(0,0);
+    s1.setDirection('v');
+
+    it('Creado el barco debería devolver true', function () {
+        expect( s1.alive() ).to.be.true;
     });
 
-});
-
-describe('tablero', function () {
-    var tablero = require('../JS/app_o').tablero;
-
-    it('debería devolver true', function () {
-        expect( (new tablero('game')).valid() ).to.be.true;
+    it('Golpea al barco - debería devolver true', function () {
+        expect( s1.hit(0,0) ).to.be.true;
     });
 
-    it('debería devolver false', function () {
-        expect( (new tablero()).valid() ).to.be.false;
+    it('Debería devolver true', function () {
+        expect( s1.alive() ).to.be.true;
+    });
+
+    it('No golpea al barco - debería devolver false', function () {
+        expect( s1.hit(10,0) ).to.be.false;
+    });
+
+    it('Debería devolver true', function () {
+        expect( s1.alive() ).to.be.true;
+    });
+
+    it('Golpea al barco - debería devolver true', function () {
+        expect( s1.hit(1,0) ).to.be.true;
+    });
+
+    it('Debería devolver true', function () {
+        expect( s1.alive() ).to.be.true;
+    });
+
+    it('Golpea al barco - debería devolver true', function () {
+        expect( s1.hit(2,0) ).to.be.true;
+    });
+
+    it('Debería devolver true', function () {
+        expect( s1.alive() ).to.be.true;
+    });
+
+    it('Golpea al barco - debería devolver true', function () {
+        expect( s1.hit(3,0) ).to.be.true;
+    });
+
+    it('Debería devolver false', function () {
+        expect( s1.alive() ).to.be.false;
     });
 
 });
