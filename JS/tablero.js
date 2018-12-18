@@ -31,9 +31,9 @@ class ship{
     hit(x,y){
         let endX = this.x , endY = this.y;
         if( this.direction == 'v' )
-            endX += this.size;
+            endX += this.size -1;
         else if( this.direction == 'h' )
-            endY += this.size;
+            endY += this.size -1;
         else
             return false;
         if( x >= this.x && x <= endX && y >= this.y && y <= endY ){
