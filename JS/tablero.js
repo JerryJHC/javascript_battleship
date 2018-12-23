@@ -1,5 +1,5 @@
 //Clase para contener informacion de los barcos en el tablero
-class ship{
+class Ship{
     constructor( size ){
         this.name = this.getName(size);
         this.size = size;
@@ -50,7 +50,7 @@ class ship{
 }
 
 //Clase para controlar las partidas sonbre un tablero
-class tablero{
+class Board{
     //Para crear el tablero se le pasa el id de la tabla donde dibujar en html
     constructor( tableID , gameType ){
         let rows = 10 , columns = 10;
@@ -304,5 +304,5 @@ class tablero{
 }
 
 //Exportando modulos para test
-module.exports.ship = ship;
-module.exports.tablero = tablero;
+module.exports.Ship = Ship;
+module.exports.Board = Board;
