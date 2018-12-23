@@ -63,14 +63,5 @@ td:hover {
 .water{ background-color: aqua; }
 .water.attacked{    background-color: blue; }
 
-.Acorazado{ background-color: crimson;  }
-.Acorazado.attacked{    background-color: red;  }
-
-.Portaviones{ background-color: darkgreen;  }
-.Portaviones.attacked{    background-color: green;  }
-
-.Buque{ background-color: darkgoldenrod;  }
-.Buque.attacked{    background-color: yellow;  }
-
-.Navio{ background-color: slateblue;  }
-.Navio.attacked{    background-color: blueviolet;  }
+.ship{ background-color: crimson;  }
+.ship.attacked{    background-color: red;  }
