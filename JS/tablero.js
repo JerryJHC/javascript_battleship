@@ -28,7 +28,8 @@ class Ship{
         this.direction = direction;
     }
 
-    hit(x,y){
+
+    verifyPosition(x,y){
         let endX = this.x , endY = this.y;
         if( this.direction == 'v' )
             endX += this.size -1;
@@ -36,7 +37,11 @@ class Ship{
             endY += this.size -1;
         else
             return false;
-        if( x >= this.x && x <= endX && y >= this.y && y <= endY ){
+        return x >= this.x && x <= endX && y >= this.y && y <= endY;
+    }
+
+    hit(x,y){
+        if( this.verifyPosition(x,y) ){
             this.health--;
             return true;
         }else
@@ -89,15 +94,11 @@ class Board{
         this.direction = '';
         this.active++;
         if( this.minActive < this.ships.length ){
-            this.showActiveShip();
             this.activeShip(this.minActive);
+            return true;
         }else{
             this.edit = false;
-            if( this.gameType == 0 ){
-                document.getElementById("informationPanel").hidden = false;
-                document.getElementById("editPanel").hidden = true;
-                this.sendEvent( "editPanel","edit" );
-            }
+            return false;
         }
     }
 
@@ -118,11 +119,6 @@ class Board{
         this.minActive = -1;
         for( let i = 0 ; i < cant ; i++ )
             this.ships[i] = new ship(list[i]);
-    }
-
-    //funcion para validar si el tablero se puede utilizar
-    valid(){
-        return ( this.table !== undefined && this.tableID != '' && this.tableID !== undefined ) ? true : false;
     }
 
     //Funcion para atacar una posicion del tablero
@@ -199,46 +195,6 @@ class Board{
         return true;
     }
 
-    //Dibuja el tablero
-    drawGame() {
-        var tablero = document.getElementById(this.tableID);
-    
-        while (tablero.hasChildNodes()) tablero.removeChild(tablero.firstChild);
-      
-        for (let i = -1; i < this.table.length ; i++) {
-            var fila = document.createElement("tr");
-            for (let j = -1; j < this.table[0].length; j++) {
-                var col = document.createElement("td");
-                fila.appendChild(col);
-                if (i === -1 && j === -1) {
-                } else if (i === -1 && j !== -1) {
-                    col.textContent = String.fromCharCode(65 + j);
-                } else if (j === -1 && i !== -1) {
-                    col.textContent = i;
-                } else {
-                    col.setAttribute('class', '_' + i + 'n' + j + " water" );
-                    col.game = this;
-                    col.addEventListener("click", this.handlerCell );
-                }
-            }
-            tablero.appendChild(fila);
-        }
-    }
-
-    //Gestiona los eventos de las celdas
-    handlerCell(e) {
-        let coors = this.className.replace("_","").split('n');
-        coors[0] = parseInt(coors[0]);
-        coors[1] = parseInt(coors[1]);
-        if( this.game.start && this.game.gameType == 1 ){
-            this.game.attack( coors[0] , coors[1] );
-            this.removeEventListener('click', this.game.handlerCell);
-            this.game.sendEvent('informationPanel','attack');
-        }else if( this.game.edit ){
-            this.game.addShip( coors[0] , coors[1] )
-        }
-    }
-
     //Activa el barco a utilizar en la edicion
     activeShip(active){
         this.active = active;
@@ -255,12 +211,6 @@ class Board{
             this.direction = 'v';
         else if( direction == 'h' )
                 this.direction = 'h';
-    }
-
-    //Muestra el barco activo en la edicion
-    showActiveShip(){
-        if( this.validateActive() )
-            document.getElementById("activeShip").innerText = "Nombre : " + this.ships[this.active].name + ' - Tamaño : ' + this.ships[this.active].size;
     }
 
     //Genera un evento en un elemento de HTML
@@ -300,6 +250,14 @@ class Board{
             if( this.ships[i].alive() )   return false;
         return true;
     }
+
+}
+
+class PlayerBoard extends Board{
+
+}
+
+class CPUBoard extends Board{
 
 }
 
