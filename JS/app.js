@@ -12,23 +12,24 @@ function resetGame(){
 
     document.getElementById("editPanel").hidden = false;
 
-    document.getElementById("informationPanel").addEventListener('attack',game);
     document.getElementById("informationPanel").hidden = true;
 
     document.getElementById("TableroJ2").hidden = true;
 
-    tableroJ1 = new tablero('game',0);
-    tableroJ1.drawGame();
+    tableroJ1 = new PlayerBoard('game');
+    drawGame(tableroJ1);
     tableroJ1.startEdition();
     tableroJ1.activeShip( tableroJ1.minActive );
+    showActiveShip(tableroJ1);
 }
 
 //Controla la edicion de barcos
 function addShip(){
     let action = this.getAttribute('data-action');
-    if( action == 'random' )
+    if( action == 'random' ){
         tableroJ1.randomShips();
-    else
+        validateEdition(tableroJ1);
+    }else
         tableroJ1.setActiveDirection(action);
 }
 
@@ -44,7 +45,7 @@ function drawGame( board ) {
 
     while (table.hasChildNodes()) table.removeChild(table.firstChild);
   
-    for (let i = -1; i < this.table.length ; i++) {
+    for (let i = -1; i < board.table.length ; i++) {
         var row = document.createElement("tr");
         for (let j = -1; j < board.table[0].length; j++) {
             var col = document.createElement("td");
@@ -60,7 +61,7 @@ function drawGame( board ) {
                 col.addEventListener("click", handlerCell );
             }
         }
-        tablero.appendChild(row);
+        table.appendChild(row);
     }
 }
 
@@ -69,19 +70,25 @@ function handlerCell() {
     let coors = this.className.replace("_","").split('n');
     coors[0] = parseInt(coors[0]);
     coors[1] = parseInt(coors[1]);
-    if( this.game.start && this.game.gameType == 1 ){
+    if( this.game.start ){
         this.game.attack( coors[0] , coors[1] );
         this.removeEventListener('click', this.game.handlerCell);
-        this.game.sendEvent('informationPanel','attack');
+        CPUAttack();
     }else if( this.game.edit ){
-        this.game.addShip( coors[0] , coors[1] )
+        this.game.addShip( coors[0] , coors[1] );
+        validateEdition(this.game);
     }
+}
+
+function CPUAttack(){
+    let pos = tableroJ1.randomAttack();
+    setCell( tableroJ1 , pos[0] , pos[1] , "attacked" );
 }
 
 //Valida si hay barcos por colocar
 function validateEdition(board){
     if( board.validateEdition() )
-        board.showActiveShip();
+        showActiveShip(board);
     else{
         document.getElementById("informationPanel").hidden = false;
         document.getElementById("editPanel").hidden = true;
@@ -91,15 +98,13 @@ function validateEdition(board){
 
 //Inicializa el juego
 function startGame(){
-    tableroJ2 = new tablero('game2',1);
-    tableroJ2.drawGame();
+    tableroJ2 = new Board('game2');
+    drawGame(tableroJ2);
     tableroJ2.startEdition();
     tableroJ2.randomShips();
 
-    tableroJ1.startGame("CPU");
-    tableroJ2.startGame("Jugador1");
-    
-    document.getElementById("editPanel").removeEventListener('edit',startGame);
+    tableroJ1.startGame();
+    tableroJ2.startGame();
 
     document.getElementById("TableroJ2").hidden = false;
 }
@@ -122,6 +127,11 @@ function endGame(looser){
     tableroJ2.endGame();
     alert("Ha terminado la partida el ganador es : " + looser.enemy );
     document.getElementById("reset").hidden = false;
+}
+
+//Agrega un valor a una celda de la vista
+function setCell( board, x , y , value ){
+    document.querySelector("#" + board.tableID + " ._" + x + 'n' + y ).setAttribute('class' , value );
 }
 
 window.onload = resetGame;
