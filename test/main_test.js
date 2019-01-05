@@ -53,12 +53,12 @@ describe('ship', function () {
 
 });
 
-describe('Board', function () {
+describe('PlayerBoard', function () {
     var Ship = require('../JS/game').Ship;
     var Board = require('../JS/game').Board;
     var PlayerBoard = require('../JS/game').PlayerBoard;
 
-    //Crea 100 barcos
+    //Crea 100 tableros
     for (let i = 0; i < 100; i++) {
         let b1 = new PlayerBoard('b' + i);
 
@@ -69,14 +69,15 @@ describe('Board', function () {
             expect(b1.end()).to.be.false;
         });
 
-        //Realiza hasta 100 ataques para cubrir el tablero y asegurarse que la partida termina
-        for (let i = 0; i < 100; i++) {
-            it(b1.tableID + ' - Ataque : Deberia devolver true', function () {
-                let s = b1.randomAttack();
-                return s[0] >= 0 && s[0] <= 9 && s[1] >= 0 && s[1] <= 9;
-            });
-            if (b1.end()) break;
-        }
+        it(b1.tableID + ' - Ataque : Deberia devolver un numero', function () {
+            expect((() => {
+                //Realiza hasta 100 ataques para cubrir el tablero y asegurarse que la partida termina
+                for (let i = 0; i < 100; i++) {
+                    let s = b1.randomAttack();
+                    if (b1.end()) return i;
+                }
+            })()).to.be.an('number');
+        });
 
         it(b1.tableID + ' - End Game : Deberia devolver true', function () {
             expect(b1.end()).to.be.true;
