@@ -63,5 +63,5 @@ td:hover {
 .water , #game2 .ship{ background-color: aqua; }
 .water.attacked{    background-color: blue; }
 
-.ship{ background-color: crimson;  }
+.ship{ background-color: darkgreen  }
 #game2 .ship.attacked , .ship.attacked{    background-color: red;  }

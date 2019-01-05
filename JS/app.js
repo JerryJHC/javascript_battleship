@@ -40,6 +40,11 @@ function showActiveShip(board) {
         document.getElementById("activeShip").innerText = "Nombre : " + board.ships[board.active].name + ' - Tamaño : ' + board.ships[board.active].size;
 }
 
+//Muestra un mensaje del tablero
+function showInfo(board,enemy){
+    document.querySelector("#informationPanel ."+board.tableID).textContent = enemy + " " + board.msg;
+}
+
 //Dibuja el tablero
 function drawGame(board) {
     var table = document.getElementById(board.tableID);
@@ -75,6 +80,7 @@ function handlerCell() {
         this.game.attack(coors[0], coors[1]);
         setCell(tableroJ2, coors[0], coors[1], "attacked");
         this.removeEventListener('click', handlerCell);
+        showInfo(tableroJ2,"Jugador 1");
         if (tableroJ2.end()) endGame("Jugador 1");
         else CPUAttack();
     } else if (this.game.edit) {
@@ -88,6 +94,7 @@ function handlerCell() {
 function CPUAttack() {
     let pos = tableroJ1.randomAttack();
     setCell(tableroJ1, pos[0], pos[1], "attacked");
+    showInfo(tableroJ1,"CPU");
     if (tableroJ1.end()) endGame("CPU");
 }
 
