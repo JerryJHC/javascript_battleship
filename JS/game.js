@@ -58,7 +58,7 @@ class Ship {
 class Board {
     //Para crear el tablero se le pasa el id de la tabla donde dibujar en html
     constructor(tableID) {
-        this.rows = 10; 
+        this.rows = 10;
         this.columns = 10;
         this.tableID = tableID;
         this.start = false;
@@ -160,7 +160,7 @@ class Board {
                 this.table[i][j] = 'B';
 
         this.ships[this.active].setPosition(x, y);
-        this.ships[this.active].setDirection(this.direction);        
+        this.ships[this.active].setDirection(this.direction);
 
         return true;
     }
@@ -199,7 +199,7 @@ class Board {
         while (this.active < this.ships.length) {
             let rndX = Math.round(Math.random() * (this.rows - 1)), rndY = Math.round(Math.random() * (this.columns - 1));
             this.direction = (Math.random() > 0.5) ? 'v' : 'h';
-            if( this.addShip(rndX, rndY) ) this.validateEdition();
+            if (this.addShip(rndX, rndY)) this.validateEdition();
         }
     }
 
